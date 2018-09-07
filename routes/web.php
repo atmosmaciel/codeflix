@@ -19,10 +19,18 @@ Auth::routes();
 
 Route::get('/home', 'HomeController@index')->name('home');
 
+/*
+ * Admin Routes
+ */
 Route::group([
     'prefix' => 'admin',
     'as' => 'admin.',
-    'middleware' => 'can:administrator'
+    'namespace' => 'Admin\\'
 ], function () {
+    Route::name('login')->get('login', 'Auth\LoginController@showLoginForm');
+    Route::post('login', 'Auth\LoginController@login');
 
+    Route::group(['middleware' => 'can:administrator'], function () {
+        Route::name('logout')->post('logout', 'Auth\LoginController@logout');
+    });
 });
